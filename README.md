@@ -79,6 +79,63 @@ HybridFlow-ITS/
 
 ---
 
+## Technical Specifications
+
+### Passenger Car Unit (PCU) Weighting
+To reflect road space occupancy and acceleration profiles in mixed traffic, detections are weighted according to standardized traffic engineering criteria:
+
+| Vehicle Class | PCU Weight | Description |
+| :--- | :--- | :--- |
+| Bus | 3.0 | Heavy public transit vehicle |
+| Truck | 3.0 | Heavy commercial goods vehicle |
+| Van | 1.0 | Light commercial vehicle |
+| Car | 1.0 | Standard passenger car |
+| ThreeWheel | 1.0 | Auto-rickshaw / intermediate public transit |
+| Motorbike | 0.5 | Powered two-wheeler |
+
+### Signal Optimization Formulation
+Optimal cycle length ($C_o$) and green split ($g_i$) for phase $i$ are computed via Webster's method:
+
+$$C_o = \frac{1.5 L + 5}{1 - Y}$$
+
+$$g_i = \frac{y_i}{Y} (C_o - L)$$
+
+Where:
+- $L$ is total lost time per cycle (start-up lost time and yellow/all-red clearance intervals).
+- $y_i = q_i / s_i$ is the flow ratio for critical phase $i$.
+- $Y = \sum y_i$ is the total intersection flow ratio, subject to $Y < 1$.
+
+---
+
+## Getting Started
+
+### Prerequisites
+- **Rust Toolchain**: 1.80+ (`cargo`, `rustc`)
+- **Node Runtime**: Bun 1.0+
+- **Python**: 3.10+ (for model training and dataset tooling)
+- **NVIDIA GPU Driver**: CUDA 12.0+ (recommended for edge inference acceleration)
+
+### Building the Core Engine
+```bash
+cd core
+cargo check
+cargo build --release
+```
+
+### Validating the Training Dataset
+```bash
+python training/prepare_dataset.py
+```
+
+### Initializing the Dashboard
+```bash
+cd dashboard
+bun install
+bun run dev
+```
+
+---
+
 ## License
 
 This project is licensed under the MIT License.
